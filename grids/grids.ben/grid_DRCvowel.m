@@ -32,7 +32,12 @@ if CALIBRATE
   pause;
   settingsFile = 'E:\auditory-objects\benware\benware\astrid\SettingsCalibDRCvowel2014_07_15.m';
 else
-  settingsFile = 'E:\auditory-objects\benware\benware\astrid\SettingsDRCvowel2014_07_15.m';    
+  switch strtrim(hostname)
+    case {'ATWSN647','schleppi'}
+      settingsFile = '../Stimuli/Settings/SettingsDRCvowel2014_07_15.m';    
+    otherwise
+      settingsFile = 'E:\auditory-objects\benware\benware\astrid\SettingsDRCvowel2014_07_15.m';    
+  end
 end
 
 fprintf('Generating stimuli...\n');

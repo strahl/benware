@@ -30,3 +30,4 @@ state.userQuit = false;
 state.noData.alreadyWarned = false;
 state.noData.warnUser = false;
 state.sweepTooShort.userWarned = false;
+state.test = false; % needed as a global variable as it controls the behaviour at several occasions

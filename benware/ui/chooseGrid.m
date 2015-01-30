@@ -2,6 +2,7 @@ function grid = chooseGrid(stimDir)
 % grid = chooseGrid(stimDir)
 % 
 % Allows user to choose a grid from the subdirectory grids/
+global state;
 
 % what is in the directory
 l = load('user.mat');
@@ -20,20 +21,24 @@ end
 
 % scan for stimulus directories in stimDir and put information in allstim
 if ~isempty(stimDir)
-  if ~exist(stimDir', 'dir')
-    errorBeep(sprintf('Stimulus search directory in expt.stimulusDirectory does not exist: %s', stimDir));
-  end
-
-  dirs = dir(stimDir);
-  for ii = 1:length(dirs)
-    if dirs(ii).isdir && dirs(ii).name(1)~='.'
-        d = dirs(ii).name;
-        thisstim.name = d;
-        thisstim.value = [stimDir filesep d];
-        thisstim.type = 2;
-        allstim{end+1} = thisstim;
-    end
-  end
+   if ~exist(stimDir', 'dir')
+      if state.test == false
+         errorBeep(sprintf('Stimulus search directory in expt.stimulusDirectory does not exist: %s', stimDir));
+       else
+         fprintf('WARNING: Stimulus search directory in expt.stimulusDirectory does not exist: %s', stimDir);
+       end
+   else
+      dirs = dir(stimDir);
+      for ii = 1:length(dirs)
+         if dirs(ii).isdir && dirs(ii).name(1)~='.'
+            d = dirs(ii).name;
+            thisstim.name = d;
+            thisstim.value = [stimDir filesep d];
+            thisstim.type = 2;
+            allstim{end+1} = thisstim;
+         end
+      end
+   end
 end
 
 [srt, idx] = sort(cellfun(@(x) x.name, allstim, 'uni', false));

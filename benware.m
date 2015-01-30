@@ -42,14 +42,11 @@ loadexpt;
 
 % set defaults
 fakeHardware = false;
-TEST = false;
+TEST = true;
 if TEST
-    if ispc
-      dataRoot = [tempdir 'benware'];
-      if ~exist(dataRoot,'dir')
-        mkdir(dataRoot);
-      end
-    else
+    fprintf('Welcome to an Aperture Science Laboratories test chambers...\n');
+    state.test = true;
+    if ~ispc  % dataRoot for the case ispc is handled separately below
       dataRoot = '\';
     end
     fakeHardware = true;
@@ -70,7 +67,14 @@ else
 end
 
 if ispc
-  dataRoot = expt.dataRoot;
+  if TEST
+      dataRoot = [tempdir 'benware'];
+      if ~exist(dataRoot,'dir')
+        mkdir(dataRoot);
+      end      
+  else
+    dataRoot = expt.dataRoot;
+  end
   expt.exptDir = [dataRoot expt.exptSubDir];
   expt.dataDir = [dataRoot expt.exptSubDir expt.dataSubDir];
 else
