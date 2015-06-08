@@ -23,8 +23,13 @@ plotData.sampleTimes = plotData.samplesToPlot/fs_in;
 plotData.lineHandles = zeros(1,plotData.nChannels)-1;
 
 % positions
-n.cols = 4;
-n.rows = ceil(nChannels/n.cols);
+if nChannels<4
+  n.cols = nChannels;
+  n.rows = 1;
+else
+  n.cols = 4;
+  n.rows = ceil(nChannels/n.cols);
+end
 
 w = struct;
 w.L = 0.025;
@@ -107,11 +112,17 @@ end
 
 
 for chan = 1:plotData.nChannels
-    plotData.subplot(chan) = axes('position', pos{chan}, 'xtick', [], 'ytick', [], ...
+    if verLessThan('matlab', '8.4')
+      plotData.subplot(chan) = axes('position', pos{chan}, 'xtick', [], 'ytick', [], ...
         'xlim', [1 nSamplesExpected]/fs_in, 'ylim', [-1.02 1.02], ...
         'drawmode', 'fast', 'ticklength', [0 0], ...
         'xcolor', get(f,'color'), 'ycolor', get(f,'color'),  'ButtonDownFcn', {'clickOnSubplot',chan});
-
+    else
+      plotData.subplot(chan) = axes('position', pos{chan}, 'xtick', [], 'ytick', [], ...
+        'xlim', [1 nSamplesExpected]/fs_in, 'ylim', [-1.02 1.02], ...
+        'sortmethod', 'depth', 'ticklength', [0 0], ...
+        'xcolor', get(f,'color'), 'ycolor', get(f,'color'),  'ButtonDownFcn', {'clickOnSubplot',chan});
+    end
     defaultTickProps   = {'parent', plotData.subplot(chan), 'hittest', 'off', 'visible', 'off', 'color', [.75 .75 .75]};
     visibleAxisProps   = {'parent', plotData.subplot(chan), 'hittest', 'off', 'color', [0 0 0]};
     invisibleAxisProps = {'parent', plotData.subplot(chan), 'hittest', 'off', 'color', [0 0 0], 'visible', 'off'};
